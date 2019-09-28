@@ -25,29 +25,32 @@ module osa() {
     vzdalenost_opravdoveho_otvoru_stopky_od_okraje = 4.3;
     posun_stopky_od_stredu = [0,  vzdalenost_opravdoveho_otvoru_stopky_od_okraje - vzdalenost_vystredeneho_otvoru_stopky_od_okraje, 0];
     posun_stopky_od_podstavy = [0, 0, vyska_krabicky - vyska_zakladny_stopky];
-    // Základna.
+    
     difference() {
-        centered_cube([sirka_krabicky, hloubka_krabicky, vyska_krabicky]);
-        
-        // Díra.
-        translate(posun_stopky_od_podstavy + posun_stopky_od_stredu) {
-            mirror([0, 0, 1]) {
-                cylinder(nekonecno, d=sirka_otvoru_krabicky);
+        union() {
+            // Základna.
+            difference() {
+                centered_cube([sirka_krabicky, hloubka_krabicky, vyska_krabicky]);
+                
+                // Díra.
+                translate(posun_stopky_od_podstavy + posun_stopky_od_stredu) {
+                    mirror([0, 0, 1]) {
+                        cylinder(nekonecno, d=sirka_otvoru_krabicky);
+                    }
+                    translate([-sirka_otvoru_krabicky / 2, 0, 0]) {
+                        mirror([0, 1, 1]) {
+                            cube([sirka_otvoru_krabicky, nekonecno, nekonecno]);
+                        };
+                    }
+                }
             }
-            translate([-sirka_otvoru_krabicky / 2, 0, 0]) {
-                mirror([0, 1, 1]) {
-                    cube([sirka_otvoru_krabicky, nekonecno, nekonecno]);
-                };
+            // Šťopka.
+            translate(posun_stopky_od_podstavy + posun_stopky_od_stredu) {
+                cylinder(vyska_stopky, d=sirka_stopky);
             }
         }
-    }
-    // Šťopka.
-    translate(posun_stopky_od_podstavy + posun_stopky_od_stredu) {
-        difference() {
-            cylinder(vyska_stopky, d=sirka_stopky);
-            translate(kousek_niz) {
-                cylinder(nekonecno, d=sirka_otvoru_stopky);
-            }
+        translate(posun_stopky_od_stredu) {
+            cylinder(nekonecno, d=sirka_otvoru_stopky);
         }
     }
 }
