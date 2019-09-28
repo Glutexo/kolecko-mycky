@@ -15,7 +15,6 @@ module centered_cube(cube_vector) {
 }
 
 module tvar_pulky_steny_s_nozickami() {
-    t_h_hrany = 2.3;
     t_b_hrany = 1.7;
     t_zubu = 2.5;
     v_rovne_casti_zubu = 3.0;
@@ -117,23 +116,26 @@ module osa() {
         }
     }
     
-    module zbytek_krabicky() {
-        h = 10.3;
-        t_steny = 1.7;
+    module krabicka_bez_steny_a_podlahy(velikost, t_steny, t_stropu) {
         difference() {
             // Vnější obrys.
-            cube([s_krabicky, h, v_krabicky]);
+            cube(velikost);
             
-            // Odebraný vnitřek. Kousíček kvůli jednoznačnosti stěny přiléhajícího ke stěně s nožkami.
-            translate([t_steny, h - t_steny, v_krabicky - t_h_hrany_krabicky]) {
-                // Zrcadlení kvůli růstu dolů (-z).
-                mirror([0, 1, 0]) {
-                    mirror([0, 0, 1]) {
-                        cube([s_krabicky - t_steny * 2, nekonecno, nekonecno]);
+            // Odebraný vnitřek.
+            translate([t_steny, velikost[1] - t_steny, velikost[2] - t_stropu]) {
+                mirror([0, 1, 0]) {  // Nekonečný růst k sobě (-y, zruší přední stěnu.
+                    mirror([0, 0, 1]) {  // Nekonečný růst dolů (-z), zruší podlahu.
+                        cube([velikost[0] - t_steny * 2, nekonecno, nekonecno]);
                     }
                 }
             }
         }
+    }
+    
+    module zbytek_krabicky() {
+        h = 10.3;
+        t_steny = 1.7;
+        krabicka_bez_steny_a_podlahy([s_krabicky, h, v_krabicky], t_steny, t_h_hrany_krabicky);
     }
  
     color([0.5, 0, 0]) {
