@@ -6,7 +6,7 @@ hloubka_kolecka = 5.9;
 vyska_zakladny_kolecka = vyska_okraje - hloubka_kolecka;
 
 na_zakladne_kolecka = [0, 0, vyska_zakladny_kolecka];
-pod_zakladnou_kolecka = [0, 0, -kousek];
+kousek_niz = [0, 0, -kousek];
 
 sirka_kolecka_s_okrajem = 39.8;
 tloustka_kolecka = 2.6;
@@ -19,6 +19,8 @@ vyska_stopky=12.7; // Včetně základny kolečka.
 sirka_stopky_s_okrajem = 13.8;
 
 sirka_otvoru = 9.3;
+sirka_prohlubne = 11.8;
+hloubka_prohlubne = 4.4;
 
 difference() {
     union() {
@@ -34,7 +36,8 @@ difference() {
         cylinder(vyska_zakladny_stopky, d=sirka_zakladny_stopky);
         cylinder(vyska_stopky, d=sirka_stopky_s_okrajem);
     }
-    translate(pod_zakladnou_kolecka) {
+    translate(kousek_niz) {
+        cylinder(hloubka_prohlubne + kousek, d=sirka_prohlubne);
         cylinder(nekonecno, d=sirka_otvoru);
     }
 }
