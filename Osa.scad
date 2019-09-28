@@ -28,18 +28,6 @@ module osa() {
     posun_stopky_od_stredu = [0,  od_okraje_k_opravdovemu_otvoru_stopky - od_okraje_k_vystredenemu_otvoru_stopky, 0];
     posun_stopky_od_podstavy = [0, 0, v_krabicky - v_zakladny_stopky];
     
-    s_podstavy_nozicky = 0.3;
-    s_vrsku_nozicky = 5.9;
-    
-    module nozicka() {
-        polygon([
-            [0, v_krabicky],
-            [s_krabicky, v_krabicky],
-            [s_krabicky, 0],
-            [s_krabicky - s_podstavy_nozicky, 0]
-        ]);
-    }
-
     difference() {
         union() {
             // Základna.
