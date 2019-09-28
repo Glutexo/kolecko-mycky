@@ -1,5 +1,6 @@
 kousek = 1;
 nekonecno = 100;
+tolerance = 0.5;
 
 module kolecko() {
     vyska_okraje = 7.6;
@@ -19,7 +20,7 @@ module kolecko() {
     vyska_stopky=12.7; // Včetně základny kolečka.
     sirka_stopky_s_okrajem = 13.8;
 
-    sirka_otvoru = 9.3;
+    sirka_otvoru = 8.8;
     sirka_prohlubne = 11.8;
     hloubka_prohlubne = 4.4;
 
@@ -37,11 +38,13 @@ module kolecko() {
             cylinder(vyska_zakladny_stopky, d=sirka_zakladny_stopky);
             cylinder(vyska_stopky, d=sirka_stopky_s_okrajem);
         }
+
+        // Prohlubeň.
         translate(kousek_niz) {
-            cylinder(hloubka_prohlubne + kousek, d=sirka_prohlubne);
+            cylinder(hloubka_prohlubne + kousek, d=sirka_prohlubne + tolerance);
             cylinder(nekonecno, d=sirka_otvoru);
         }
     }
 }
 
-kolecko();
+kolecko($fn=256);
