@@ -8,12 +8,28 @@ s_pul_krabicky = s_krabicky / 2;
 t_steny_s_nozkami = 4.5;
 t_h_hrany_krabicky = 2.3;
 
-module centered_cube(cube_vector) {
+module _vystredena_kostka(cube_vector) {
     translate([-cube_vector[0] / 2, -cube_vector[1] / 2, 0]) {
         cube(cube_vector);
     }
 }
 
+module _krabicka_bez_steny_a_podlahy(velikost, t_steny, t_stropu) {
+    difference() {
+        // Vnější obrys.
+        cube(velikost);
+        
+        // Odebraný vnitřek.
+        translate([t_steny, velikost[1] - t_steny, velikost[2] - t_stropu]) {
+            mirror([0, 1, 0]) {  // Nekonečný růst k sobě (-y, zruší přední stěnu.
+                mirror([0, 0, 1]) {  // Nekonečný růst dolů (-z), zruší podlahu.
+                    cube([velikost[0] - t_steny * 2, nekonecno, nekonecno]);
+                }
+            }
+        }
+    }
+}
+    
 module tvar_pulky_steny_s_nozickami() {
     t_b_hrany = 1.7;
     t_zubu = 2.5;
@@ -92,7 +108,7 @@ module osa() {
         union() {
             // Základna.
             difference() {
-                centered_cube([s_krabicky, h_krabicky, v_krabicky]);
+                _vystredena_kostka([s_krabicky, h_krabicky, v_krabicky]);
 
                 // Díra.
                 translate(posun_stopky_od_podstavy + posun_stopky_od_stredu) {
@@ -116,26 +132,10 @@ module osa() {
         }
     }
     
-    module krabicka_bez_steny_a_podlahy(velikost, t_steny, t_stropu) {
-        difference() {
-            // Vnější obrys.
-            cube(velikost);
-            
-            // Odebraný vnitřek.
-            translate([t_steny, velikost[1] - t_steny, velikost[2] - t_stropu]) {
-                mirror([0, 1, 0]) {  // Nekonečný růst k sobě (-y, zruší přední stěnu.
-                    mirror([0, 0, 1]) {  // Nekonečný růst dolů (-z), zruší podlahu.
-                        cube([velikost[0] - t_steny * 2, nekonecno, nekonecno]);
-                    }
-                }
-            }
-        }
-    }
-    
     module zbytek_krabicky() {
         h = 10.3;
         t_steny = 1.7;
-        krabicka_bez_steny_a_podlahy([s_krabicky, h, v_krabicky], t_steny, t_h_hrany_krabicky);
+        _krabicka_bez_steny_a_podlahy([s_krabicky, h, v_krabicky], t_steny, t_h_hrany_krabicky);
     }
  
     color([0.5, 0, 0]) {
